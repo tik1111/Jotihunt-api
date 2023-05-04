@@ -9,7 +9,6 @@ router.post("/", async (req, res) => {
 
     try{
         const refreshToken  = req.headers["x-refresh-token"];
-        console.log("hi");
         if ((!refreshToken)) {
             res.status(400).send("refreshToken is required");
         }
@@ -21,7 +20,7 @@ router.post("/", async (req, res) => {
     }
 
     const newToken = jwt.sign(
-        {email_id:'tim@tim.nl'},
+        {email_id: oldToken.email},
         process.env.REFRESH_TOKEN_KEY,
         {
           expiresIn: "365d",
@@ -30,8 +29,8 @@ router.post("/", async (req, res) => {
 
       const newRefreshToken = await RefreshToken.create({
         refreshToken: newToken,
-        email: "tim2@tim.nl", 
-        tenant_id: "TestTenant"
+        email: oldToken.email, 
+        tenant_id: oldToken.tenant_id,
       });
       
 
