@@ -93,8 +93,8 @@ router.post("/register", async (req, res) => {
     
        await RefreshToken.create({
         refreshToken: refreshToken,
-        email: "tim@tim.nl", 
-        tenant_id: "TestTenant"
+        email: user.email, 
+        tenant_id: user.tenant_id
       });
 
       user.token = token;
