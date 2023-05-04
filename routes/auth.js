@@ -1,15 +1,16 @@
 require("../config/database").connect();
 require("dotenv").config();
+
 var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
+var jwt = require('jsonwebtoken');
+var RefreshToken = require('../models/refreshToken'); 
 
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource auth resource');
-});
+
 
 router.post("/login", async (req, res) => {
 
@@ -27,6 +28,15 @@ router.post("/login", async (req, res) => {
       if (user && (bcrypt.compare(password, user.password))) {
         
         // user
+        const token = jwt.sign(
+            { user_id: user._id, email },
+            process.env.ACCESS_TOKEN_KEY,
+            {
+              expiresIn: "2h",
+            }
+          );
+
+       
         return res.status(200).json(user);
       }
       return res.status(400).send("Invalid Credentials");
@@ -39,10 +49,10 @@ router.post("/register", async (req, res) => {
   // Our register logic starts here
   try {
     // Get user input
-    const { first_name, last_name, email, password } = req.body;
+    const { name, email, password } = req.headers;
 
     // Validate user input
-    if (!(email && password && first_name && last_name)) {
+    if (!(email && password && name)) {
       res.status(400).send("All input is required");
     }
 
@@ -59,12 +69,36 @@ router.post("/register", async (req, res) => {
 
     // Create user in our database
     const user = await User.create({
-      first_name,
-      last_name,
+      name: name,
       email: email.toLowerCase(), // sanitize: convert email to lowercase
       password: encryptedPassword,
       tenant_id: "TestTenant"
     });
+
+    const token = jwt.sign(
+        { user_id: user._id, email },
+        process.env.ACCESS_TOKEN_KEY,
+        {
+          expiresIn: "2h",
+        }
+      );
+
+      const refreshToken = jwt.sign(
+        { user_id: user._id, email },
+        process.env.REFRESH_TOKEN_KEY,
+        {
+          expiresIn: "2y",
+        }
+      );
+    
+       await RefreshToken.create({
+        refreshToken: refreshToken,
+        email: "tim@tim.nl", 
+        tenant_id: "TestTenant"
+      });
+
+      user.token = token;
+      user.refreshtoken = refreshToken;
 
     // return new user
     return res.status(201).json(user);
