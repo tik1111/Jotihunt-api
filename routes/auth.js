@@ -7,6 +7,7 @@ var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
 var RefreshToken = require('../models/refreshToken'); 
+var tokenLogic = require('../backend/jwt');
 
 
 /* GET users listing. */
@@ -83,22 +84,10 @@ router.post("/register", async (req, res) => {
         }
       );
 
-      const refreshToken = jwt.sign(
-        { user_id: user._id, email },
-        process.env.REFRESH_TOKEN_KEY,
-        {
-          expiresIn: "2y",
-        }
-      );
-    
-       await RefreshToken.create({
-        refreshToken: refreshToken,
-        email: user.email, 
-        tenant_id: user.tenant_id
-      });
+      let newRefreshToken = await tokenLogic.newRefreshToken(user);
 
       user.token = token;
-      user.refreshtoken = refreshToken;
+      user.refreshtoken = newRefreshToken;
 
     // return new user
     return res.status(201).json(user);
