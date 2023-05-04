@@ -14,7 +14,7 @@ router.post("/", async (req, res) => {
             res.status(400).send("refreshToken is required");
         }
 
-        const oldToken = await RefreshToken.findOne({ refreshToken });
+        const oldToken = await RefreshToken.findOneAndDelete({ refreshToken });
 
     if (!oldToken) {
       return res.status(409).send("refreshToken not found");
@@ -33,6 +33,7 @@ router.post("/", async (req, res) => {
         email: "tim2@tim.nl", 
         tenant_id: "TestTenant"
       });
+      
 
       return res.status(201).json(newRefreshToken);
 
