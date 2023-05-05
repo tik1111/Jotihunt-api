@@ -1,4 +1,4 @@
-require("../config/database").connect();
+//require("../config/database").connect();
 require("dotenv").config();
 
 var express = require('express');
@@ -6,7 +6,6 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
-var RefreshToken = require('../models/refreshToken'); 
 var tokenLogic = require('../backend/jwt');
 
 
@@ -29,13 +28,11 @@ router.post("/login", async (req, res) => {
       if (user && (bcrypt.compare(password, user.password))) {
         
         // user
-        const token = jwt.sign(
-            { user_id: user._id, email },
-            process.env.ACCESS_TOKEN_KEY,
-            {
-              expiresIn: "2h",
-            }
-          );
+        let accessToken =  tokenLogic.newAccessToken(user.email);
+        let refreshToken = await tokenLogic.newRefreshToken(user.email);
+
+        user.token = accessToken;
+        user.refreshtoken = refreshToken;
 
        
         return res.status(200).json(user);

@@ -1,9 +1,11 @@
-async function newRefreshToken (oldToken) {
-    var jwt = require('jsonwebtoken');
-    var RefreshToken = require('../models/refreshToken');
+var jwt = require('jsonwebtoken');
+var RefreshToken = require('../models/refreshToken');
+
+async function newRefreshToken (userData) {
+
 
     const newToken = jwt.sign(
-        {email_id: oldToken.email},
+        {email_id: userData.email},
         process.env.REFRESH_TOKEN_KEY,
         {
           expiresIn: "365d",
@@ -12,11 +14,25 @@ async function newRefreshToken (oldToken) {
 
       const newRefreshToken = await RefreshToken.create({
         refreshToken: newToken,
-        email: oldToken.email, 
-        tenant_id: oldToken.tenant_id,
+        email: userData.email, 
+        tenant_id: userData.tenant_id,
       });
-
-      return newRefreshToken;
+      newRefreshToken;
+      return newToken;
 }
 
-module.exports = {newRefreshToken}
+function newAccessToken(userData){
+
+  const newAccessToken = jwt.sign(
+    {email_id: userData.email},
+    process.env.ACCESS_TOKEN_KEY,
+    {
+      expiresIn: "2h",
+    }
+  );
+
+  return newAccessToken;
+
+}
+
+module.exports = {newRefreshToken, newAccessToken}
