@@ -6,7 +6,7 @@ var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
 var jwt = require('jsonwebtoken');
-var tokenLogic = require('../backend/jwt');
+var tokenLogic = require('../middleware/tokenLogic');
 
 
 /* GET users listing. */
@@ -28,8 +28,8 @@ router.post("/login", async (req, res) => {
       if (user && (bcrypt.compare(password, user.password))) {
         
         // user
-        let accessToken =  tokenLogic.newAccessToken(user.email);
-        let refreshToken = await tokenLogic.newRefreshToken(user.email);
+        let accessToken =  tokenLogic.newAccessToken(email, user.tenant_id);
+        let refreshToken = await tokenLogic.newRefreshToken(email, user.tenant_id);
 
         user.token = accessToken;
         user.refreshtoken = refreshToken;
@@ -73,17 +73,10 @@ router.post("/register", async (req, res) => {
       tenant_id: "TestTenant"
     });
 
-    const token = jwt.sign(
-        { user_id: user._id, email },
-        process.env.ACCESS_TOKEN_KEY,
-        {
-          expiresIn: "2h",
-        }
-      );
+      let newAccessToken = tokenLogic.newAccessToken(user.email);
+      let newRefreshToken = await tokenLogic.newRefreshToken(user.email, user.tenant_id);
 
-      let newRefreshToken = await tokenLogic.newRefreshToken(user);
-
-      user.token = token;
+      user.token = newAccessToken;
       user.refreshtoken = newRefreshToken;
 
     // return new user
