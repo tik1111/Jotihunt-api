@@ -21,11 +21,14 @@ router.post("/login", async (req, res) => {
       // Validate user input
       if (!(email && password)) {
         res.status(400).send("All input is required");
+
       }
+      var  encryptedPassword = await bcrypt.hash(password,10);
+
       // Validate if user exist in our database
       const user = await User.findOne({ email });
-  
-      if (user && (bcrypt.compare(password, user.password))) {
+    
+      if (user && await bcrypt.compare(password, user.password)) {
         
         // user
         let accessToken =  tokenLogic.newAccessToken(email, user.tenant_id);

@@ -56,9 +56,7 @@ router.post("/atoken", async (req, res) => {
     }catch(e){
         console.log(e);
     }
-      
-
+     
 });
-
 
 module.exports = router;
