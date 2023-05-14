@@ -4,7 +4,7 @@ var express = require('express');
 var router = express.Router();
 
 var RefreshToken = require('../models/refreshToken');
-var tokenLogic = require('../middleware/tokenLogic');
+var tokenLogic = require('../logic/tokenLogic');
 
 router.post("/rtoken", async (req, res) => {
 

@@ -5,8 +5,9 @@ var express = require('express');
 var router = express.Router();
 var bcrypt = require('bcryptjs');
 var User = require('../models/user');
+var Role = require("../models/userRoles");
 var jwt = require('jsonwebtoken');
-var tokenLogic = require('../middleware/tokenLogic');
+var tokenLogic = require('../logic/tokenLogic');
 
 
 /* GET users listing. */
@@ -31,7 +32,7 @@ router.post("/login", async (req, res) => {
       if (user && await bcrypt.compare(password, user.password)) {
         
         // user
-        let accessToken =  tokenLogic.newAccessToken(email, user.tenant_id);
+        let accessToken =  tokenLogic.newAccessToken(email, user.id, );
         let refreshToken = await tokenLogic.newRefreshToken(email, user.tenant_id);
 
         user.token = accessToken;
@@ -76,18 +77,28 @@ router.post("/register", async (req, res) => {
       tenant_id: "TestTenant"
     });
 
-      let newAccessToken = tokenLogic.newAccessToken(user.email);
+    //Create user Role default as User
+    await Role.create({
+      tenant_id: "TestTenant",
+      user_id:user.id,
+      role:"user"
+    });
+
+      let newAccessToken = tokenLogic.newAccessToken(user.email, user.id);
       let newRefreshToken = await tokenLogic.newRefreshToken(user.email, user.tenant_id);
 
       user.token = newAccessToken;
       user.refreshtoken = newRefreshToken;
-
     // return new user
     return res.status(201).json(user);
   } catch (err) {
     console.log(err);
   }
   // Our register logic ends here
+});
+
+router.put('/role', async(req,res)=>{
+
 });
 
 module.exports = router;
