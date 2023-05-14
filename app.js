@@ -30,7 +30,7 @@ app.use('/welcome/tentantadmin', authentication, authorization("tenant-admin"),w
 app.use('/welcome/user', authentication, authorization("user"),welcomeUserRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/refresh',authorization("user"), refreshRouter);
+app.use('/refresh', refreshRouter);
 
 
 // catch 404 and forward to error handler

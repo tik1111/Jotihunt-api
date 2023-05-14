@@ -17,10 +17,10 @@ router.post("/atoken", async (req, res) => {
             res.status(400).send("Refresh token is required");
         }
 
-        const tokenVerify = await RefreshToken.findOne({ refreshToken });
-
+        const tokenVerify = await RefreshToken.findOne({ refreshToken: refreshToken });
+        
         if(tokenVerify){
-            let newAccessToken = tokenLogic.newAccessToken(refreshToken.email);
+            let newAccessToken = await tokenLogic.newAccessToken(refreshToken.email, tokenVerify.user_id);
             return res.status(201).json(newAccessToken);
         }else{
             res.status(400).send("Token not valid");

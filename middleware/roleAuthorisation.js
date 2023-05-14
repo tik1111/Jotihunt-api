@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 var Role = require("../models/userRoles");
-const user = require("../models/user");
 const config = process.env;
 const tenantAdmin = role  => {return async (req, res, next) => {
     try {
@@ -19,7 +18,7 @@ const tenantAdmin = role  => {return async (req, res, next) => {
           const decoded = jwt.verify(token, config.ACCESS_TOKEN_KEY);
           req.user_id = decoded;
           //! find right user.
-          
+
           const findRole = await Role.findOne({user_id: decoded.user_id});
           if(findRole == null){
             return res.status(401).send("No auth state");

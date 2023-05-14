@@ -85,7 +85,7 @@ router.post("/register", async (req, res) => {
     });
 
       let newAccessToken = tokenLogic.newAccessToken(user.email, user.id);
-      let newRefreshToken = await tokenLogic.newRefreshToken(user.email, user.tenant_id);
+      let newRefreshToken = await tokenLogic.newRefreshToken(user.email, user.id, user.tenant_id);
 
       user.token = newAccessToken;
       user.refreshtoken = newRefreshToken;
