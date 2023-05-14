@@ -6,7 +6,7 @@ De API laag van de jotihunt fontend app.
 
 ## API Routes
 
-#### Authenticatie
+#### Authentication
 
 
 ```http
