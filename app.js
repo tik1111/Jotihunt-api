@@ -3,16 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-const auth = require("./middleware/auth");
-const tenantAdmin = require("./middleware/roleAuthorisation")
+const authentication = require("./middleware/auth");
+const authorization = require("./middleware/roleAuthorisation")
 
-
-var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var authRouter = require('./routes/auth');
 var refreshRouter = require('./routes/refresh');
-
-
+var welcomeUserRouter = require('./routes/welcome/welcomeUser');
+var welcomeTenantAdminRouter = require('./routes/welcome/welcomeTenantAdmin');
+var welcomePlatforrmAdminRouter = require('./routes/welcome/welcomePlatformAdmin');
 
 var app = express();
 
@@ -26,10 +25,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/welcome', auth, tenantAdmin("platform-admin"),indexRouter);
+app.use('/welcome/platformadmin', authentication, authorization("platform-admin"),welcomePlatforrmAdminRouter);
+app.use('/welcome/tentantadmin', authentication, authorization("tenant-admin"),welcomeTenantAdminRouter);
+app.use('/welcome/user', authentication, authorization("user"),welcomeUserRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
-app.use('/refresh', refreshRouter);
+app.use('/refresh',authorization("user"), refreshRouter);
 
 
 // catch 404 and forward to error handler

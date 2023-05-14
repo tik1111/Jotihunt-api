@@ -63,7 +63,7 @@ const tenantAdmin = role  => {return async (req, res, next) => {
         
       } else {
         return res.status(401).json({
-          message: "not allowed in this user role." 
+          message: "Access token required" 
         });
       }
     } catch (error) {

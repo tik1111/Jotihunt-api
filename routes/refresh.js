@@ -6,33 +6,6 @@ var router = express.Router();
 var RefreshToken = require('../models/refreshToken');
 var tokenLogic = require('../logic/tokenLogic');
 
-router.post("/rtoken", async (req, res) => {
-
-    try{
-
-        const refreshToken  = req.headers["x-refresh-token"];
-        
-        if ((!refreshToken)) {
-            res.status(400).send("refreshToken is required");
-        }
-
-        const oldToken = await RefreshToken.findOneAndDelete({ refreshToken });
-
-        if (!oldToken) {
-            return res.status(409).send("refreshToken not found");
-        }
-
-        let newRefreshToken = await tokenLogic.newRefreshToken(oldToken.email,oldToken.tenant_id);
-      
-
-        return res.status(201).json(newRefreshToken);
-
-    }catch(e){
-        console.log(e);
-    }
-      
-
-});
 
 router.post("/atoken", async (req, res) => {
 
