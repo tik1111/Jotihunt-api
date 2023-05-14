@@ -1,7 +1,7 @@
 
 # Jotihunt API
 
-De API laag van de jotihunt fontend app.
+Jotihunt API for mobile apps.
 
 
 ## API Routes
@@ -66,7 +66,7 @@ De API laag van de jotihunt fontend app.
 
 ## Tech Stack
 
-**Client:** Flutter see [Front-end repository](https://github.com/tik1111/jotihunt)
+**Client:** Flutter, see [Front-end repository](https://github.com/tik1111/jotihunt)
 
 **Server:** Node, Express
 
