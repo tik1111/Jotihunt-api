@@ -64,6 +64,10 @@ De API laag van de jotihunt fontend app.
 | :-------- | :------- | :-------------------------------- |
 | `x-access-token`      | `string` | **Required**. User has to have platform-admin role defined by an other platform admin |
 
+## Tech Stack
 
+**Client:** Flutter see [Front-end repository](https://github.com/tik1111/jotihunt)
+
+**Server:** Node, Express
 
 
