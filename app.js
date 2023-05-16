@@ -12,6 +12,7 @@ var refreshRouter = require('./routes/refresh');
 var welcomeUserRouter = require('./routes/welcome/welcomeUser');
 var welcomeTenantAdminRouter = require('./routes/welcome/welcomeTenantAdmin');
 var welcomePlatforrmAdminRouter = require('./routes/welcome/welcomePlatformAdmin');
+var groupsRouter = require('./routes/groups/groups')
 
 var app = express();
 
@@ -25,12 +26,20 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//Authentication and refresh routes
+app.use('/auth', authRouter);
+app.use('/refresh', refreshRouter);
+
+//Routes to test authorization
 app.use('/welcome/platformadmin', authentication, authorization("platform-admin"),welcomePlatforrmAdminRouter);
 app.use('/welcome/tentantadmin', authentication, authorization("tenant-admin"),welcomeTenantAdminRouter);
 app.use('/welcome/user', authentication, authorization("user"),welcomeUserRouter);
+
+//Not in user yet
 app.use('/users', usersRouter);
-app.use('/auth', authRouter);
-app.use('/refresh', refreshRouter);
+
+//Jotihunt groups
+app.use('/groups',authentication, authorization('user'),groupsRouter); 
 
 
 // catch 404 and forward to error handler
