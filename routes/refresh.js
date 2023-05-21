@@ -18,7 +18,7 @@ router.post("/atoken", async (req, res) => {
         }
 
         const tokenVerify = await RefreshToken.findOne({ refreshToken: refreshToken });
-        
+        console.log(tokenVerify);
         if(tokenVerify){
             let newAccessToken = await tokenLogic.newAccessToken(refreshToken.email, tokenVerify.user_id);
             return res.status(201).json(newAccessToken);

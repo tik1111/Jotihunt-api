@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken');
 var RefreshToken = require('../models/refreshToken');
-const user = require('../models/user');
+const user = require('../models/user/user');
 
 async function newRefreshToken (email, user_id, tenant_id) {
 
@@ -20,16 +20,17 @@ async function newRefreshToken (email, user_id, tenant_id) {
       return newToken;
 }
 
-function newAccessToken(email,_id){
-  if (email != "" || _id != ""){
+function newAccessToken(email,user_id){
+  if (email != "" || user_id != ""){
     const newAccessToken = jwt.sign(
-      {email_id: email, user_id:_id},
+      {email_id: email, user_id:user_id},
       process.env.ACCESS_TOKEN_KEY,
       {
         expiresIn: "1d",
       }
       
     );
+    newAccessToken;
     return newAccessToken;
   }
   

@@ -13,6 +13,7 @@ var welcomeUserRouter = require('./routes/welcome/welcomeUser');
 var welcomeTenantAdminRouter = require('./routes/welcome/welcomeTenantAdmin');
 var welcomePlatforrmAdminRouter = require('./routes/welcome/welcomePlatformAdmin');
 var groupsRouter = require('./routes/groups/groups')
+var areaStatusRouter = require('./routes/areaStatus');
 
 var app = express();
 
@@ -40,6 +41,9 @@ app.use('/users', usersRouter);
 
 //Jotihunt groups
 app.use('/groups',authentication, authorization('user'),groupsRouter); 
+
+//Jotihunt area's
+app.use('/areastatus',authentication,authorization('user'),areaStatusRouter);
 
 
 // catch 404 and forward to error handler

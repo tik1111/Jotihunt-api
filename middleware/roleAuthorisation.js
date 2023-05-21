@@ -1,5 +1,5 @@
 const jwt = require("jsonwebtoken");
-var Role = require("../models/userRoles");
+var Role = require("../models/user/userRoles");
 const config = process.env;
 const tenantAdmin = role  => {return async (req, res, next) => {
     try {

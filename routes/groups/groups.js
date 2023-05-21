@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
 var group = require('../../models/participantGroup');
+const authorization = require("../../middleware/roleAuthorisation")
 
 /* GET home page. */
-router.get('/', async function (req, res, next) {
+router.get('/',async function (req, res, next,) {
     try{
         var allGroups = await group.find();
         return res.status(200).json(allGroups);
@@ -14,10 +15,10 @@ router.get('/', async function (req, res, next) {
 
 });
 
-router.post('/',async function(req, res, next) {
+router.post('/', authorization("platform-admin") ,async function(req, res, next) {
     try{
         const groupListInJSON = JSON.parse(req.body['data']);
-
+        await group.deleteMany();
         var arr = await groupListInJSON.data
         for (var i = 0; i < arr.length; i++){
             var obj = arr[i];

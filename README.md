@@ -64,6 +64,14 @@ Jotihunt API for mobile apps.
 | :-------- | :------- | :-------------------------------- |
 | `x-access-token`      | `string` | **Required**. User has to have platform-admin role defined by an other platform admin |
 
+#### Jotihunt game
+```http
+  GET /groups
+```
+| Parameter | Type     | Description                       |
+| :-------- | :------- | :-------------------------------- |
+| `x-access-token`      | `string` | **Required**. User has to have user role defined |
+
 ## Tech Stack
 
 **Client:** Flutter, see [Front-end repository](https://github.com/tik1111/jotihunt)
