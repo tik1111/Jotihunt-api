@@ -16,6 +16,8 @@ var groupsRouter = require('./routes/groups/groups')
 var areaStatusRouter = require('./routes/areaStatus');
 
 var app = express();
+const PORT = 443;
+const HOST = '0.0.0.0';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -61,5 +63,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
+app.listen(PORT, HOST, () => {
+  console.log(`Running on http://${HOST}:${PORT}`);
+});
 module.exports = app;
