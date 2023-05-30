@@ -72,6 +72,14 @@ Jotihunt API for mobile apps.
 | :-------- | :------- | :-------------------------------- |
 | `x-access-token`      | `string` | **Required**. User has to have user role defined |
 
+## Dot Env
+API_PORT=;
+
+ACCESS_TOKEN_KEY= ;
+REFRESH_TOKEN_KEY=;
+
+MONGO_URI=;
+
 ## Tech Stack
 
 **Client:** Flutter, see [Front-end repository](https://github.com/tik1111/jotihunt)

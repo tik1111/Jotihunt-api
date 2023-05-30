@@ -37,7 +37,7 @@ app.use('/welcome/tentantadmin', authentication, authorization("tenant-admin"),w
 app.use('/welcome/user', authentication, authorization("user"),welcomeUserRouter);
 
 //Not in user yet
-app.use('/users', usersRouter);
+app.use('/users',authentication, authorization('user') , usersRouter);
 
 //Jotihunt groups
 app.use('/groups',authentication, authorization('user'),groupsRouter); 
@@ -61,5 +61,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
